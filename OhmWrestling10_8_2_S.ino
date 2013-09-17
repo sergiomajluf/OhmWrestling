@@ -2,8 +2,12 @@
 #include <Servo.h>
 Servo MeterArm;
 
-// QTR Sensors library
-// Download from https://github.com/pololu/qtr-sensors-arduino
+/* 
+   QTR Sensors library
+   Download from https://github.com/pololu/qtr-sensors-arduino
+   Maybe we can do without the library, just as a single analog input
+   but with this we get simple calibration, and other nice features
+*/
 #include <QTRSensors.h>
 
 //SET ANALOG PINS////
@@ -49,31 +53,26 @@ int DegreeAngleTime;
 const int BLUEbutton= 7;
 const int ORGbutton= 13;
 
-///set the IR ints here
+// Set the IR variables defined here
 #define NUM_SENSORS             1  // number of sensors used
 #define NUM_SAMPLES_PER_SENSOR  4  // average 4 analog samples per sensor reading
 #define EMITTER_PIN             QTR_NO_EMITTER_PIN  // emitter is controlled by digital pin 2
 
-// Initizlize QTR Sensor
-// and set the analog pin that the sensor will be connected to
+// Initizlize QTR Sensor and set the analog pin that the sensor will be connected to
 QTRSensorsAnalog qtra((unsigned char[]) {15},NUM_SENSORS, NUM_SAMPLES_PER_SENSOR, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
-const int QTR_LED = 53;
+const int QTR_LED = 53; // Connect an LED to have calibration feedback
 
 unsigned int IR[NUM_SENSORS];
-//threshold for IR 
-int IRthreshold = 300;
-///set the true function for the boolean IR
-boolean black = false;
-///holds the boolean int
-int center= 0;
 
+int IRthreshold = 300;  // Threshold for IR 
+boolean black = false;  // Set the true function for the boolean IR
+int center= 0;          // Holds the boolean int
 
-
-///BUTTON DEBOUNCING INTS
+// BUTTON DEBOUNCING INTS
 long time = 0;         // the last time the output pin was toggled
-long debounce = 200;   // the debounce time, increase if the output flickers
+long debounce = 200;    // the debounce time, increase if the output flickers
 int BLUEbuttonState =LOW;//the current state of button
 int BLUEreading;
 int BLUEprevious = HIGH; //the previous reading of button
@@ -115,8 +114,11 @@ void setup () {
   
   initQTRASensor();
   
-  // HW Interrupts on MEGA, are # over Pin, as follows
-  // 0/2    1/3    2/21	3/20	4/19	5/18
+  /*
+  HW Interrupts on MEGA, are # over Pin, as follows
+  0/2    1/3    2/21	3/20	4/19	5/18
+  
+  */
   attachInterrupt(2, IRBoolean, CHANGE);
 }
 
@@ -177,26 +179,4 @@ void loop(){
 
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
